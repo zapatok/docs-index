@@ -42,7 +42,7 @@ footer{max-width:900px;margin:0 auto;padding:20px;color:#6f7889;font-size:12.5px
 <body>
 <header>
   <h1>Biblioteca de prevención de riesgos laborales</h1>
-  <div class="sub">168 documentos oficiales · 6.867 páginas · 13.300 fragmentos indexados por artículo y página</div>
+  <div class="sub">168 documentos oficiales · 6.867 páginas · 13.749 fragmentos indexados por artículo y página</div>
 </header>
 <main>
   <form class="search" onsubmit="return go(event)">
@@ -51,6 +51,7 @@ footer{max-width:900px;margin:0 auto;padding:20px;color:#6f7889;font-size:12.5px
   </form>
   <div class="chips" id="chips"></div>
   <div class="meta" id="meta"></div>
+  <div class="meta"><a href="#" id="alldocs" style="color:#7cc4ff">ver los 168 documentos →</a></div>
   <div id="out"></div>
   <div class="hint" id="hint">
     Prueba con <code>prexor</code>, <code>sílice</code>, <code>tmert</code>, <code>comité paritario</code>,
@@ -124,6 +125,7 @@ function render(){
         <span>
           <button class="act" onclick="toggle(${i})">ver completo</button>
           <button class="act" onclick="cita(${i})">copiar cita</button>
+          <button class="act" onclick="docView(${r.doc_id})">ver documento</button>
         </span>
       </div>
     </div>`).join('');
@@ -142,11 +144,54 @@ function cita(i){
   });
 }
 
+async function docView(id){
+  const out = document.getElementById('out'), meta = document.getElementById('meta');
+  out.innerHTML = '<div class="hint">cargando documento…</div>'; meta.textContent = '';
+  const d = (await api("select * from documento($1)", [id]))[0];
+  const rows = await api("select chunk_id, page, section, texto from fragmentos_doc($1, 400)", [id]);
+  const arts = rows.filter(r => r.section);
+  meta.innerHTML = `<b>${esc(d.norma)}</b> · ${esc(d.tipo)} ${esc(d.anio||'')} · ${d.paginas} pág · ${rows.length} fragmentos`
+    + (d.extraido === 'ocr' ? ' · <span class="err">texto por OCR</span>' : '')
+    + ` · <a href="#" onclick="goDocs();return false" style="color:#7cc4ff">← volver al índice</a>`;
+  out.innerHTML = rows.map((r,i) => `
+    <div class="card">
+      <div class="badges">
+        <span class="b pg">p. ${esc(r.page)}</span>
+        ${r.section ? `<span class="b art">${esc(r.section)}</span>` : ''}
+      </div>
+      <div class="txt clip" id="t${i}">${esc(r.texto)}</div>
+      <div class="row"><span></span><button class="act" onclick="toggle(${i})">ver completo</button></div>
+    </div>`).join('');
+  if (!rows.length) out.innerHTML = '<div class="hint">sin fragmentos con texto</div>';
+}
+
+async function goDocs(){
+  const out = document.getElementById('out'), meta = document.getElementById('meta');
+  out.innerHTML = '<div class="hint">cargando índice de documentos…</div>';
+  const rows = await api("select * from documentos()", []);
+  const byCat = {};
+  rows.forEach(r => (byCat[r.categoria] = byCat[r.categoria] || []).push(r));
+  meta.innerHTML = `168 documentos · <a href="#" onclick="document.getElementById('out').innerHTML='';document.getElementById('meta').textContent='';document.getElementById('hint').style.display='block';return false" style="color:#7cc4ff">← volver al buscador</a>`;
+  out.innerHTML = Object.keys(byCat).sort().map(cat => `
+    <h2 style="font-size:14px;color:#9aa4b2;margin:18px 0 8px">${esc(cat)} · ${byCat[cat].length} documentos</h2>
+    ${byCat[cat].map(d => `<div class="card" style="padding:10px 12px">
+      <a href="#" onclick="docView(${d.doc_id});return false" style="color:#e6edf3;text-decoration:none">
+        <b>${esc(d.norma)}</b></a>
+      <div class="badges" style="margin-top:6px">
+        <span class="b">${esc(d.tipo)} ${esc(d.anio||'')}</span>
+        <span class="b pg">${d.paginas} pág</span>
+        <span class="b art">${d.chunks} fragmentos</span>
+      </div>
+      <div class="small" style="margin-top:6px;color:#8b949e">${esc(d.materia||'')}</div>
+    </div>`).join('')}`).join('');
+}
+
 function esc(s){ return (s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 
 // chips
 document.getElementById('chips').innerHTML = FILTERS.map(f =>
   `<span class="chip${f.id===cur?' on':''}" data-id="${f.id}">${f.label}</span>`).join('');
+document.getElementById('alldocs').addEventListener('click', e => { e.preventDefault(); goDocs(); });
 document.getElementById('chips').addEventListener('click', e => {
   const c = e.target.closest('.chip'); if (!c) return;
   cur = c.dataset.id;
