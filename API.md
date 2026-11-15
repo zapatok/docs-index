@@ -1,7 +1,7 @@
 # API de la biblioteca de prevención
 
 Base documental: **168 documentos oficiales chilenos** (leyes, DFL, decretos, protocolos MINSAL,
-compendio SUSESO, normas NCh), **6.867 páginas**, **13.300 fragmentos** indexados con norma,
+compendio SUSESO, normas NCh), **6.867 páginas**, **13.749 fragmentos** indexados con norma,
 página y artículo.
 
 Tres formas de consultarla, de la más simple a la más potente.

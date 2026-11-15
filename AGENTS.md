@@ -1,7 +1,7 @@
 # Instrucciones para agentes IA
 
 Esta carpeta es una **biblioteca verificable** de normativa chilena de prevención de riesgos:
-168 documentos oficiales, 6.867 páginas, 13.300 fragmentos con norma, página y artículo.
+168 documentos oficiales, 6.867 páginas, 13.749 fragmentos con norma, página y artículo.
 La consulta es de solo lectura y no requiere permisos especiales.
 
 ## Regla de oro
@@ -27,10 +27,10 @@ sin marcarlo como tal.
 |---|---|---|---|
 | `01-marco-legal` | 6 | 1.383 | Ley 16.744, DFL 1, Ley 20.123, Ley 21.561… |
 | `02-reglamentos` | 14 | 2.623 | DS 40, DS 44, DS 54, DS 594, DS 18… |
-| `03-protocolos-minsal` | 46 | 1.588 | PREXOR, sílice, TMERT, psicosocial, asbesto, plaguicidas, citostáticos, metales, UV, hipobaria/hiperbaria, dermatitis, voz, fiebre Q, gripe aviar |
+| `03-protocolos-minsal` | 46 | 2.029 | PREXOR, sílice, TMERT, psicosocial, asbesto, plaguicidas, citostáticos, metales, UV, hipobaria/hiperbaria, dermatitis, voz, fiebre Q, gripe aviar |
 | `04-guias-tecnicas` | 2 | 66 | guías de implementación |
 | `05-suseso` | 6 | 4.331 | compendio de normativa SUSESO |
-| `06-normas-nch` | 94 | 3.309 | NCh de seguridad y ergonomía |
+| `06-normas-nch` | 94 | 3.317 | NCh de seguridad y ergonomía |
 
 ## Límites y trampas conocidas
 

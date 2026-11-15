@@ -1,6 +1,6 @@
 # Biblioteca de prevención de riesgos (Chile)
 
-Buscador sobre **168 documentos oficiales** (6.867 páginas) de normativa chilena de seguridad y
+Buscador sobre **168 documentos oficiales** (6.867 páginas, 13.749 fragmentos) de normativa chilena de seguridad y
 salud laboral, indexados a nivel de artículo con cita verificable.
 
 **Buscador:** https://zapatok.github.io/docs-index/
@@ -9,8 +9,8 @@ salud laboral, indexados a nivel de artículo con cita verificable.
 |---|---|
 | documentos | 168 (PDF originales: 2.861 archivos, 657 MB) |
 | páginas | 6.867 |
-| fragmentos indexados | 13.300 |
-| con artículo detectado | 2.751 |
+| fragmentos indexados | 13.749 |
+| con artículo detectado | 2.755 |
 | leídos por OCR | 11 documentos / 293 páginas |
 | búsqueda | léxica (tsvector español) + semántica (pgvector 384d) + fusión RRF |
 | infraestructura | Neon Postgres serverless, rol de solo lectura, sin backend propio |
