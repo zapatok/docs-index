@@ -38,6 +38,7 @@ desde un navegador o desde un agente sin backend propio.
 | `buscar_vec(vector, n, categoria)` | búsqueda semántica (pgvector, coseno) |
 | `buscar_hibrido(q, vector, n, categoria, w_lex)` | fusión RRF de léxica + vectorial; devuelve `origen` |
 | `articulo(norma, art, n)` | artículo exacto: `articulo('Ley 16.744','66')` |
+| `fragmentos_doc(doc_id, n)` | todos los fragmentos de un documento en orden, con página y artículo (para leer una norma completa) |
 
 Categorías para el filtro: `01-marco-legal`, `02-reglamentos`, `03-protocolos-minsal`,
 `04-guias-tecnicas`, `05-suseso`, `06-normas-nch`.
