@@ -1,9 +1,33 @@
-# docs-index
+# Biblioteca de prevención de riesgos (Chile)
 
-Buscador de la biblioteca de prevención de riesgos laborales (normativa chilena).
+Buscador sobre **168 documentos oficiales** (6.867 páginas) de normativa chilena de seguridad y
+salud laboral, indexados a nivel de artículo con cita verificable.
 
-168 documentos oficiales, 6.867 páginas, 13.300 fragmentos cortados por artículo y página.
-Búsqueda léxica en español sobre Postgres (`tsvector`, parser `spanish`).
+**Buscador:** https://zapatok.github.io/docs-index/
 
-`config.js` lleva una cadena de conexión con rol **solo lectura** (`SELECT` + función `buscar()`);
-no puede escribir ni borrar.
+| | |
+|---|---|
+| documentos | 168 (PDF originales: 2.861 archivos, 657 MB) |
+| páginas | 6.867 |
+| fragmentos indexados | 13.300 |
+| con artículo detectado | 2.751 |
+| leídos por OCR | 11 documentos / 293 páginas |
+| búsqueda | léxica (tsvector español) + semántica (pgvector 384d) + fusión RRF |
+| infraestructura | Neon Postgres serverless, rol de solo lectura, sin backend propio |
+
+## Contenido
+
+- `index.html` · buscador web (filtros por categoría, copiar cita, ver completo).
+- `API.md` · cómo consultar: HTTP+SQL, servidor MCP, CLI.
+- `AGENTS.md` · instrucciones para que un agente IA use la base sin inventar artículos.
+- `tools/kb.py` · cliente/CLI (`buscar`, `fragmento`, `contexto`, `documento`, `documentos`, `articulo`).
+- `tools/kb_mcp.py` · servidor MCP por stdio con 7 herramientas.
+- Release `datos-v1` · `chunks.jsonl`, `docs.jsonl`, `catalogo.csv`, `biblioteca.db`, `emb.npy`.
+
+## Cómo se generó
+
+`pdftotext -layout` por página → chunks ≤1.500 caracteres sin cruzar página → detección de
+`Art. N` y encabezados → OCR con tesseract (spa, 200 dpi) en los 11 escaneados → carga a
+Postgres con `tsvector('spanish')` y `vector(384)` → índices GIN + HNSW (coseno).
+
+Reproducible: ver `_meta/build_index2.py`, `_meta/ocr.py`, `_meta/embed.py`, `_meta/load_cloud.py`.
