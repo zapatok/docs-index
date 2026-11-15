@@ -70,7 +70,7 @@ const FILTERS = [
   {id:'suseso',label:'SUSESO', test:r=>/suseso/.test(r.archivo||'')},
   {id:'nch',  label:'Normas NCh', test:r=>/normas-nch/.test(r.archivo||'')},
 ];
-let cur = 'all', last = [];
+let cur = 'all', last = [], shown = [];
 
 function api(sql, params){
   return fetch(window.KB.host, {
@@ -109,6 +109,7 @@ function render(){
   const out = document.getElementById('out');
   const f = FILTERS.find(x => x.id === cur);
   const rows = last.filter(r => !f.test || f.test(r));
+  shown = rows;
   out.innerHTML = rows.map((r,i) => `
     <div class="card">
       <h3>${esc(r.norma || '—')}</h3>
@@ -131,11 +132,10 @@ function render(){
 function toggle(i){
   const el = document.getElementById('t'+i);
   el.classList.toggle('clip');
-  el.previousElementSibling; // noop
 }
 
 function cita(i){
-  const r = last[i];
+  const r = shown[i];
   const s = `${r.norma}${r.anio ? ' ('+r.anio+')' : ''}, p. ${r.page}${r.section ? ', '+r.section : ''}`;
   navigator.clipboard.writeText(s).then(()=>{
     document.getElementById('meta').textContent = 'copiado: ' + s;
