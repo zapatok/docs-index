@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Biblioteca de prevención de riesgos</title>
+<style>
+:root{--bg:#0f1115;--fg:#e7e9ee;--dim:#9aa3b2;--line:#232833;--acc:#6ea8fe;--card:#161a22}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+header{padding:28px 20px 10px;max-width:900px;margin:0 auto}
+h1{font-size:22px;margin:0 0 6px;font-weight:650;letter-spacing:-.2px}
+.sub{color:var(--dim);font-size:14px}
+main{max-width:900px;margin:0 auto;padding:0 20px 60px}
+.search{display:flex;gap:8px;margin:18px 0 10px}
+input[type=search]{flex:1;padding:13px 15px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg);font-size:16px;outline:none}
+input[type=search]:focus{border-color:#3a4a6b}
+button.go{padding:13px 18px;border-radius:10px;border:1px solid #2b4a7d;background:#1b3a66;color:#dbe7ff;font-weight:600;cursor:pointer}
+button.go:hover{background:#22457a}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 18px}
+.chip{font-size:13px;padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:#12161d;color:var(--dim);cursor:pointer}
+.chip.on{border-color:#3a4a6b;color:#cfe0ff;background:#17243a}
+.meta{color:var(--dim);font-size:13px;margin:6px 0 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:10px 0}
+.card h3{margin:0 0 6px;font-size:15px;font-weight:650}
+.badges{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 8px}
+.b{font-size:12px;padding:2px 8px;border-radius:6px;background:#1d2431;color:#a9b6cc;border:1px solid #27303f}
+.b.pg{background:#1d2b1f;color:#b7e3bf;border-color:#2a4030}
+.b.art{background:#2a2436;color:#d7c4f0;border-color:#3a3050}
+.txt{white-space:pre-wrap;color:#cfd6e2;font-size:14.5px}
+.txt.clip{max-height:5.6em;overflow:hidden;mask-image:linear-gradient(180deg,#000 60%,transparent)}
+.row{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-top:10px;flex-wrap:wrap}
+.small{font-size:12px;color:var(--dim)}
+.act{font-size:12px;padding:4px 9px;border-radius:7px;border:1px solid var(--line);background:#12161d;color:#b8c3d6;cursor:pointer}
+.act:hover{background:#1a2029}
+.hint{color:var(--dim);font-size:14px;margin:24px 0}
+.hint code{background:#12161d;border:1px solid var(--line);padding:1px 6px;border-radius:5px;color:#c3cee0}
+footer{max-width:900px;margin:0 auto;padding:20px;color:#6f7889;font-size:12.5px;border-top:1px solid var(--line)}
+.err{color:#ff9b9b;font-size:14px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Biblioteca de prevención de riesgos laborales</h1>
+  <div class="sub">168 documentos oficiales · 6.867 páginas · 13.300 fragmentos indexados por artículo y página</div>
+</header>
+<main>
+  <form class="search" onsubmit="return go(event)">
+    <input id="q" type="search" placeholder="p. ej. prexor ruido, plazo para denunciar un accidente, comité paritario" autocomplete="off" autofocus>
+    <button class="go" type="submit">Buscar</button>
+  </form>
+  <div class="chips" id="chips"></div>
+  <div class="meta" id="meta"></div>
+  <div id="out"></div>
+  <div class="hint" id="hint">
+    Prueba con <code>prexor</code>, <code>sílice</code>, <code>tmert</code>, <code>comité paritario</code>,
+    <code>artículo 66</code>, <code>plazo denuncia accidente</code>, <code>epp</code>, <code>andamios</code>.
+  </div>
+</main>
+<footer>
+  Fragmentos extraídos de los PDF oficiales con <code>pdftotext</code>, cortados por artículo y página.
+  Búsqueda léxica en español (Postgres <code>tsvector</code>). Solo lectura.
+</footer>
+<script src="config.js"></script>
+<script>
+const FILTERS = [
+  {id:'all', label:'Todo'},
+  {id:'ley',  label:'Leyes y decretos', test:r=>/^(LEY|DFL|DS|DTO|RES)$/.test(r.tipo||'')},
+  {id:'mino', label:'Protocolos MINSAL', test:r=>/(protocolos-minsal)/.test(r.archivo||'')},
+  {id:'suseso',label:'SUSESO', test:r=>/suseso/.test(r.archivo||'')},
+  {id:'nch',  label:'Normas NCh', test:r=>/normas-nch/.test(r.archivo||'')},
+];
+let cur = 'all', last = [];
+
+function api(sql, params){
+  return fetch(window.KB.host, {
+    method:'POST',
+    headers:{'Content-Type':'application/json','Neon-Connection-String':window.KB.dsn},
+    body: JSON.stringify({query: sql, params: params || []})
+  }).then(r => r.json()).then(j => { if (j.message) throw new Error(j.message); return j.rows; });
+}
+
+function go(e){
+  e.preventDefault();
+  const q = document.getElementById('q').value.trim();
+  if (!q) return false;
+  history.replaceState(null,'','?q='+encodeURIComponent(q));
+  search(q);
+  return false;
+}
+
+async function search(q){
+  const out = document.getElementById('out'), meta = document.getElementById('meta');
+  out.innerHTML = ''; meta.textContent = 'buscando…';
+  const t0 = performance.now();
+  try {
+    const rows = await api("select chunk_id, norma, tipo, anio, archivo, page, section, texto, rank from buscar($1, 40)", [q]);
+    last = rows;
+    const ms = Math.round(performance.now() - t0);
+    meta.textContent = rows.length ? rows.length + ' fragmentos · ' + ms + ' ms' : 'sin resultados';
+    document.getElementById('hint').style.display = rows.length ? 'none' : 'block';
+    render();
+  } catch (err) {
+    meta.innerHTML = '<span class="err">error: ' + err.message + '</span>';
+  }
+}
+
+function render(){
+  const out = document.getElementById('out');
+  const f = FILTERS.find(x => x.id === cur);
+  const rows = last.filter(r => !f.test || f.test(r));
+  out.innerHTML = rows.map((r,i) => `
+    <div class="card">
+      <h3>${esc(r.norma || '—')}</h3>
+      <div class="badges">
+        ${r.tipo ? `<span class="b">${esc(r.tipo)} ${esc(r.anio||'')}</span>` : ''}
+        <span class="b pg">p. ${esc(r.page)}</span>
+        ${r.section ? `<span class="b art">${esc(r.section)}</span>` : ''}
+      </div>
+      <div class="txt clip" id="t${i}">${esc(r.texto)}</div>
+      <div class="row">
+        <span class="small">${esc(r.archivo)}</span>
+        <span>
+          <button class="act" onclick="toggle(${i})">ver completo</button>
+          <button class="act" onclick="cita(${i})">copiar cita</button>
+        </span>
+      </div>
+    </div>`).join('');
+}
+
+function toggle(i){
+  const el = document.getElementById('t'+i);
+  el.classList.toggle('clip');
+  el.previousElementSibling; // noop
+}
+
+function cita(i){
+  const r = last[i];
+  const s = `${r.norma}${r.anio ? ' ('+r.anio+')' : ''}, p. ${r.page}${r.section ? ', '+r.section : ''}`;
+  navigator.clipboard.writeText(s).then(()=>{
+    document.getElementById('meta').textContent = 'copiado: ' + s;
+  });
+}
+
+function esc(s){ return (s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+// chips
+document.getElementById('chips').innerHTML = FILTERS.map(f =>
+  `<span class="chip${f.id===cur?' on':''}" data-id="${f.id}">${f.label}</span>`).join('');
+document.getElementById('chips').addEventListener('click', e => {
+  const c = e.target.closest('.chip'); if (!c) return;
+  cur = c.dataset.id;
+  document.querySelectorAll('.chip').forEach(x => x.classList.toggle('on', x.dataset.id === cur));
+  render();
+});
+
+const p = new URLSearchParams(location.search).get('q');
+if (p){ document.getElementById('q').value = p; search(p); }
+</script>
+</body>
+</html>
