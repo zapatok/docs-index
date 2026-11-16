@@ -3,204 +3,252 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Biblioteca de prevención de riesgos</title>
+<title>Biblioteca de prevención de riesgos laborales</title>
 <style>
-:root{--bg:#0f1115;--fg:#e7e9ee;--dim:#9aa3b2;--line:#232833;--acc:#6ea8fe;--card:#161a22}
+:root{--bg:#0d1117;--panel:#161b22;--line:#30363d;--fg:#e6edf3;--dim:#8b949e;--acc:#2f81f7;--ok:#3fb950;--warn:#d29922}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-header{padding:28px 20px 10px;max-width:900px;margin:0 auto}
-h1{font-size:22px;margin:0 0 6px;font-weight:650;letter-spacing:-.2px}
-.sub{color:var(--dim);font-size:14px}
-main{max-width:900px;margin:0 auto;padding:0 20px 60px}
-.search{display:flex;gap:8px;margin:18px 0 10px}
-input[type=search]{flex:1;padding:13px 15px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg);font-size:16px;outline:none}
-input[type=search]:focus{border-color:#3a4a6b}
-button.go{padding:13px 18px;border-radius:10px;border:1px solid #2b4a7d;background:#1b3a66;color:#dbe7ff;font-weight:600;cursor:pointer}
-button.go:hover{background:#22457a}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 18px}
-.chip{font-size:13px;padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:#12161d;color:var(--dim);cursor:pointer}
-.chip.on{border-color:#3a4a6b;color:#cfe0ff;background:#17243a}
-.meta{color:var(--dim);font-size:13px;margin:6px 0 16px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:10px 0}
-.card h3{margin:0 0 6px;font-size:15px;font-weight:650}
-.badges{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 8px}
-.b{font-size:12px;padding:2px 8px;border-radius:6px;background:#1d2431;color:#a9b6cc;border:1px solid #27303f}
-.b.pg{background:#1d2b1f;color:#b7e3bf;border-color:#2a4030}
-.b.art{background:#2a2436;color:#d7c4f0;border-color:#3a3050}
-.txt{white-space:pre-wrap;color:#cfd6e2;font-size:14.5px}
-.txt.clip{max-height:5.6em;overflow:hidden;mask-image:linear-gradient(180deg,#000 60%,transparent)}
-.row{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-top:10px;flex-wrap:wrap}
-.small{font-size:12px;color:var(--dim)}
-.act{font-size:12px;padding:4px 9px;border-radius:7px;border:1px solid var(--line);background:#12161d;color:#b8c3d6;cursor:pointer}
-.act:hover{background:#1a2029}
-.hint{color:var(--dim);font-size:14px;margin:24px 0}
-.hint code{background:#12161d;border:1px solid var(--line);padding:1px 6px;border-radius:5px;color:#c3cee0}
-footer{max-width:900px;margin:0 auto;padding:20px;color:#6f7889;font-size:12.5px;border-top:1px solid var(--line)}
-.err{color:#ff9b9b;font-size:14px}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.55 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+header{max-width:1180px;margin:0 auto;padding:22px 20px 8px}
+h1{margin:0 0 6px;font-size:22px;font-weight:650}
+.sub{color:var(--dim);font-size:13px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px 60px}
+.bar{display:flex;gap:8px;margin:18px 0 10px}
+input[type=text],input[type=password]{flex:1;background:var(--panel);border:1px solid var(--line);color:var(--fg);border-radius:8px;padding:12px 14px;font-size:15px;outline:none}
+input:focus{border-color:var(--acc)}
+button{background:var(--acc);color:#fff;border:0;border-radius:8px;padding:12px 20px;font-size:15px;font-weight:600;cursor:pointer}
+button.ghost{background:transparent;border:1px solid var(--line);color:var(--fg);font-weight:500}
+button:disabled{opacity:.55;cursor:default}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 16px}
+.chip{background:var(--panel);border:1px solid var(--line);color:var(--dim);padding:6px 12px;border-radius:999px;font-size:13px;cursor:pointer}
+.chip.on{background:#12233f;border-color:var(--acc);color:#cfe3ff}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:10px 0}
+.card h3{margin:0 0 6px;font-size:14px;font-weight:650;color:#cfe3ff}
+.meta{color:var(--dim);font-size:12.5px;margin-bottom:8px}
+.txt{white-space:pre-wrap;font-size:14px;color:#d5dde5}
+.acts{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.acts a,.acts span.b{font-size:12.5px;padding:5px 10px;border-radius:6px;border:1px solid var(--line);color:var(--dim);cursor:pointer;text-decoration:none;background:#11161d}
+.acts a:hover,.acts span.b:hover{color:var(--fg);border-color:var(--acc)}
+.err{color:#f85149;font-size:14px;margin:10px 0}
+.ok{color:var(--ok)}
+#lock{max-width:420px;margin:8vh auto;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:26px}
+#lock h2{margin:0 0 4px;font-size:18px}
+#lock p{color:var(--dim);font-size:13px;margin:0 0 18px}
+#lock label{display:block;font-size:12.5px;color:var(--dim);margin:12px 0 5px}
+#lock input{width:100%}
+#lock button{width:100%;margin-top:18px}
+.hint{color:var(--dim);font-size:12.5px;margin-top:18px}
+.docs{columns:2;column-gap:22px}
+@media(max-width:820px){.docs{columns:1}}
+.docline{break-inside:avoid;padding:7px 0;border-bottom:1px solid #21262d;font-size:13.5px}
+.docline a{color:#cfe3ff;text-decoration:none;cursor:pointer}
+.docline a:hover{text-decoration:underline}
+.docline .n{color:var(--dim);font-size:12px}
+.foot{color:#6e7681;font-size:12px;margin-top:28px;border-top:1px solid var(--line);padding-top:14px}
+.hidden{display:none!important}
 </style>
 </head>
 <body>
-<header>
-  <h1>Biblioteca de prevención de riesgos laborales</h1>
-  <div class="sub">168 documentos oficiales · 6.867 páginas · 13.749 fragmentos indexados por artículo y página</div>
-</header>
-<main>
-  <form class="search" onsubmit="return go(event)">
-    <input id="q" type="search" placeholder="p. ej. prexor ruido, plazo para denunciar un accidente, comité paritario" autocomplete="off" autofocus>
-    <button class="go" type="submit">Buscar</button>
-  </form>
-  <div class="chips" id="chips"></div>
-  <div class="meta" id="meta"></div>
-  <div class="meta"><a href="#" id="alldocs" style="color:#7cc4ff">ver los 168 documentos →</a></div>
-  <div id="out"></div>
-  <div class="hint" id="hint">
-    Prueba con <code>prexor</code>, <code>sílice</code>, <code>tmert</code>, <code>comité paritario</code>,
-    <code>artículo 66</code>, <code>plazo denuncia accidente</code>, <code>epp</code>, <code>andamios</code>.
+
+<div id="lock">
+  <h2>Biblioteca de prevención</h2>
+  <p>Acceso restringido. El índice está cifrado y se descifra en tu navegador.</p>
+  <label>Usuario</label>
+  <input id="user" type="text" value="zapatok" autocomplete="username">
+  <label>Contraseña</label>
+  <input id="pass" type="password" autocomplete="current-password" placeholder="contraseña">
+  <button id="enter">Entrar</button>
+  <div id="lockerr" class="err"></div>
+  <div class="hint">168 documentos oficiales · 6.867 páginas · 13.556 fragmentos</div>
+</div>
+
+<div id="app" class="hidden">
+  <header>
+    <h1>Biblioteca de prevención de riesgos laborales</h1>
+    <div class="sub" id="sub">168 documentos oficiales · 6.867 páginas · 13.556 fragmentos únicos indexados por artículo y página</div>
+  </header>
+  <div class="wrap">
+    <div class="bar">
+      <input id="q" type="text" placeholder="prexor, sílice, tmert, comité paritario, artículo 66, plazo denuncia accidente…" autocomplete="off">
+      <button id="go">Buscar</button>
+      <button id="salir" class="ghost" title="cerrar sesión">Salir</button>
+    </div>
+    <div class="chips" id="chips"></div>
+    <div id="out"></div>
+    <div id="doctitle" class="hidden" style="margin:18px 0 6px"><button class="ghost" id="back">← volver a la búsqueda</button></div>
+    <div id="docs" class="hidden"></div>
+    <div id="docslist"></div>
+    <div class="foot">
+      Fragmentos extraídos de los PDF oficiales (pdftotext + OCR en los escaneados), cortados por artículo y página.
+      Búsqueda léxica en español con tesauro de jerga (PostgreSQL tsvector + expansión). Solo lectura.
+      Datos: <a href="https://github.com/zapatok/docs-index/releases/tag/datos-v1" style="color:#8b949e">datos-v1</a> ·
+      PDFs: <a href="https://github.com/zapatok/docs-index/releases/tag/pdfs-v1" style="color:#8b949e">pdfs-v1</a>
+    </div>
   </div>
-</main>
-<footer>
-  Fragmentos extraídos de los PDF oficiales con <code>pdftotext</code>, cortados por artículo y página.
-  Búsqueda léxica en español (Postgres <code>tsvector</code>). Solo lectura.
-</footer>
+</div>
+
 <script src="config.js"></script>
 <script>
-const FILTERS = [
-  {id:'all', label:'Todo'},
-  {id:'ley',  label:'Leyes y decretos', test:r=>/^(LEY|DFL|DS|DTO|RES)$/.test(r.tipo||'')},
-  {id:'mino', label:'Protocolos MINSAL', test:r=>/(protocolos-minsal)/.test(r.archivo||'')},
-  {id:'suseso',label:'SUSESO', test:r=>/suseso/.test(r.archivo||'')},
-  {id:'nch',  label:'Normas NCh', test:r=>/normas-nch/.test(r.archivo||'')},
-];
-let cur = 'all', last = [], shown = [];
+let KB = null, rows = [], shown = rows, cat = null, lastQ = "";
 
-function api(sql, params){
-  return fetch(window.KB.host, {
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+async function unlock(pw){
+  const raw = Uint8Array.from(atob(KB_CONF.blob), c => c.charCodeAt(0));
+  const salt = raw.slice(0,16), iv = raw.slice(16,28), ct = raw.slice(28);
+  const km = await crypto.subtle.importKey('raw', new TextEncoder().encode(pw), 'PBKDF2', false, ['deriveKey']);
+  const key = await crypto.subtle.deriveKey({name:'PBKDF2', salt, iterations:400000, hash:'SHA-256'},
+                km, {name:'AES-GCM', length:256}, false, ['decrypt']);
+  const pt = await crypto.subtle.decrypt({name:'AES-GCM', iv}, key, ct);
+  return JSON.parse(new TextDecoder().decode(pt));
+}
+
+async function api(sql, params){
+  const r = await fetch(KB.host.replace(/\/$/, '') + '/sql', {
     method:'POST',
-    headers:{'Content-Type':'application/json','Neon-Connection-String':window.KB.dsn},
+    headers:{'Content-Type':'text/plain;charset=UTF-8','Neon-Connection-String':KB.dsn},
     body: JSON.stringify({query: sql, params: params || []})
-  }).then(r => r.json()).then(j => { if (j.message) throw new Error(j.message); return j.rows; });
-}
-
-function go(e){
-  e.preventDefault();
-  const q = document.getElementById('q').value.trim();
-  if (!q) return false;
-  history.replaceState(null,'','?q='+encodeURIComponent(q));
-  search(q);
-  return false;
-}
-
-async function search(q){
-  const out = document.getElementById('out'), meta = document.getElementById('meta');
-  out.innerHTML = ''; meta.textContent = 'buscando…';
-  const t0 = performance.now();
-  try {
-    const rows = await api("select chunk_id, norma, tipo, anio, archivo, page, section, texto, rank from buscar($1, 40)", [q]);
-    last = rows;
-    const ms = Math.round(performance.now() - t0);
-    meta.textContent = rows.length ? rows.length + ' fragmentos · ' + ms + ' ms' : 'sin resultados';
-    document.getElementById('hint').style.display = rows.length ? 'none' : 'block';
-    render();
-  } catch (err) {
-    meta.innerHTML = '<span class="err">error: ' + err.message + '</span>';
-  }
-}
-
-function render(){
-  const out = document.getElementById('out');
-  const f = FILTERS.find(x => x.id === cur);
-  const rows = last.filter(r => !f.test || f.test(r));
-  shown = rows;
-  out.innerHTML = rows.map((r,i) => `
-    <div class="card">
-      <h3>${esc(r.norma || '—')}</h3>
-      <div class="badges">
-        ${r.tipo ? `<span class="b">${esc(r.tipo)} ${esc(r.anio||'')}</span>` : ''}
-        <span class="b pg">p. ${esc(r.page)}</span>
-        ${r.section ? `<span class="b art">${esc(r.section)}</span>` : ''}
-      </div>
-      <div class="txt clip" id="t${i}">${esc(r.texto)}</div>
-      <div class="row">
-        <span class="small">${esc(r.archivo)}</span>
-        <span>
-          <button class="act" onclick="toggle(${i})">ver completo</button>
-          <button class="act" onclick="cita(${i})">copiar cita</button>
-          <button class="act" onclick="docView(${r.doc_id})">ver documento</button>
-        </span>
-      </div>
-    </div>`).join('');
-}
-
-function toggle(i){
-  const el = document.getElementById('t'+i);
-  el.classList.toggle('clip');
-}
-
-function cita(i){
-  const r = shown[i];
-  const s = `${r.norma}${r.anio ? ' ('+r.anio+')' : ''}, p. ${r.page}${r.section ? ', '+r.section : ''}`;
-  navigator.clipboard.writeText(s).then(()=>{
-    document.getElementById('meta').textContent = 'copiado: ' + s;
   });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.message || ('HTTP ' + r.status));
+  return j.rows || [];
 }
 
-async function docView(id){
-  const out = document.getElementById('out'), meta = document.getElementById('meta');
-  out.innerHTML = '<div class="hint">cargando documento…</div>'; meta.textContent = '';
-  const d = (await api("select * from documento($1)", [id]))[0];
-  const rows = await api("select chunk_id, page, section, texto from fragmentos_doc($1, 400)", [id]);
-  const arts = rows.filter(r => r.section);
-  meta.innerHTML = `<b>${esc(d.norma)}</b> · ${esc(d.tipo)} ${esc(d.anio||'')} · ${d.paginas} pág · ${rows.length} fragmentos`
-    + (d.extraido === 'ocr' ? ' · <span class="err">texto por OCR</span>' : '')
-    + ` · <a href="#" onclick="goDocs();return false" style="color:#7cc4ff">← volver al índice</a>`;
-  out.innerHTML = rows.map((r,i) => `
+async function buscar(q){
+  const t0 = performance.now();
+  const rs = await api('select * from buscar($1::text,$2::int,null)', [q, 60]);
+  const ms = Math.round(performance.now() - t0);
+  rows = rs.map(r => ({...r, _k: r.chunk_id}));
+  shown = rows;
+  render(q, ms);
+}
+
+function pdfURL(archivo, page){
+  const base = String(archivo || '').split('/').pop();
+  if (!base) return '';
+  return 'https://github.com/' + KB_CONF.repo + '/releases/download/' + KB_CONF.tag_pdfs + '/' +
+         encodeURIComponent(base) + (page ? '#page=' + page : '');
+}
+
+function cita(r){
+  const art = (r.section && /^Art\./.test(r.section)) ? ', ' + r.section : '';
+  return (r.norma || 'Documento') + (r.anio ? ' (' + r.anio + ')' : '') + ', p. ' + r.page + art;
+}
+
+function render(q, ms){
+  lastQ = q;
+  const cats = [['Todo', null], ['Leyes y decretos','01-'], ['Reglamentos','02-'], ['Protocolos MINSAL','03-'], ['Guías técnicas','04-'], ['SUSESO','05-'], ['Normas NCh','06-']];
+  $('chips').innerHTML = cats.map(([n,v]) => `<span class="chip ${cat===v?'on':''}" data-cat="${v}">${n}</span>`).join('');
+  const list = shown.filter(r => !cat || String(r.archivo||'').startsWith(cat));
+  $('out').innerHTML = list.length ? list.map((r,i) => `
     <div class="card">
-      <div class="badges">
-        <span class="b pg">p. ${esc(r.page)}</span>
-        ${r.section ? `<span class="b art">${esc(r.section)}</span>` : ''}
+      <h3>${esc(r.norma || 'Documento')}${r.anio ? ' · ' + esc(r.anio) : ''}</h3>
+      <div class="meta">${esc(r.tipo || '')} · p. ${esc(r.page)} ${r.section ? '· ' + esc(r.section) : ''} · ${esc((r.archivo||'').split('/')[0])} · <span class="ok">score ${(r.rank ?? 0).toFixed(3)}</span></div>
+      <div class="txt" id="tx${i}">${esc((r.texto || '').slice(0, 700))}${(r.texto||'').length > 700 ? '…' : ''}</div>
+      <div class="acts">
+        <span class="b" data-full="${i}">ver completo</span>
+        <span class="b" data-cita="${i}">copiar cita</span>
+        <a href="${pdfURL(r.archivo, r.page)}" target="_blank" rel="noopener">PDF ↗</a>
+        <a href="${pdfURL(r.archivo)}" target="_blank" rel="noopener">documento</a>
+        <span class="b" data-doc="${r.doc_id}">ficha</span>
       </div>
-      <div class="txt clip" id="t${i}">${esc(r.texto)}</div>
-      <div class="row"><span></span><button class="act" onclick="toggle(${i})">ver completo</button></div>
-    </div>`).join('');
-  if (!rows.length) out.innerHTML = '<div class="hint">sin fragmentos con texto</div>';
+    </div>`).join('') : '<div class="card">Sin resultados. Prueba con otra palabra o con la jerga del rubro (prexor, cphs, planesi, tmert).</div>';
+  $('sub').textContent = (list.length ? list.length + ' resultados' : '0 resultados') +
+    (q ? ' para «' + q + '»' : '') + ' · ' + ms + ' ms · ' + (cat ? cat : 'todas las categorías'); 
+}
+
+document.addEventListener('click', async e => {
+  const t = e.target;
+  if (t.dataset.cat !== undefined) { cat = t.dataset.cat || null; render(lastQ, 0); }
+  if (t.dataset.full !== undefined) {
+    const i = +t.dataset.full, r = rows.filter(x => !cat || String(x.archivo||'').startsWith(cat))[i];
+    if (r) { const rs = await api('select * from fragmento($1::int)', [r.chunk_id]); t.textContent = rs.length ? rs[0].texto.slice(0, 4000) : '…'; }
+  }
+  if (t.dataset.cita !== undefined) {
+    const i = +t.dataset.cita, r = rows.filter(x => !cat || String(x.archivo||'').startsWith(cat))[i];
+    if (r) { navigator.clipboard.writeText(cita(r)); t.textContent = 'copiada ✓'; setTimeout(() => t.textContent = 'copiar cita', 1400); }
+  }
+  if (t.dataset.doc !== undefined) { docView(+t.dataset.doc); }
+  if (t.id === 'go' || t.id === 'back') { start(); }
+  if (t.id === 'salir') { sessionStorage.removeItem('kb'); KB = null; $('app').classList.add('hidden'); $('lock').classList.remove('hidden'); $('pass').value = ''; }
+  if (t.dataset.doclink !== undefined) { docView(+t.dataset.doclink); }
+});
+
+async function start(){
+  $('docs').classList.add('hidden'); $('doctitle').classList.add('hidden'); $('out').classList.remove('hidden');
+  $('chips').classList.remove('hidden');
+  const q = $('q').value.trim();
+  if (!q) { await goDocs(); return; }
+  $('out').innerHTML = '<div class="card">Buscando…</div>';
+  try { await buscar(q); } catch (err) { $('out').innerHTML = '<div class="err">error: ' + esc(err.message) + '</div>'; }
 }
 
 async function goDocs(){
-  const out = document.getElementById('out'), meta = document.getElementById('meta');
-  out.innerHTML = '<div class="hint">cargando índice de documentos…</div>';
-  const rows = await api("select * from documentos()", []);
+  $('out').classList.add('hidden'); $('chips').classList.add('hidden');
+  $('docs').classList.remove('hidden'); $('doctitle').classList.remove('hidden');
+  $('docs').innerHTML = '<div class="card">Cargando documentos…</div>';
+  const ds = await api('select * from documentos()', []);
   const byCat = {};
-  rows.forEach(r => (byCat[r.categoria] = byCat[r.categoria] || []).push(r));
-  meta.innerHTML = `168 documentos · <a href="#" onclick="document.getElementById('out').innerHTML='';document.getElementById('meta').textContent='';document.getElementById('hint').style.display='block';return false" style="color:#7cc4ff">← volver al buscador</a>`;
-  out.innerHTML = Object.keys(byCat).sort().map(cat => `
-    <h2 style="font-size:14px;color:#9aa4b2;margin:18px 0 8px">${esc(cat)} · ${byCat[cat].length} documentos</h2>
-    ${byCat[cat].map(d => `<div class="card" style="padding:10px 12px">
-      <a href="#" onclick="docView(${d.doc_id});return false" style="color:#e6edf3;text-decoration:none">
-        <b>${esc(d.norma)}</b></a>
-      <div class="badges" style="margin-top:6px">
-        <span class="b">${esc(d.tipo)} ${esc(d.anio||'')}</span>
-        <span class="b pg">${d.paginas} pág</span>
-        <span class="b art">${d.chunks} fragmentos</span>
-      </div>
-      <div class="small" style="margin-top:6px;color:#8b949e">${esc(d.materia||'')}</div>
-    </div>`).join('')}`).join('');
+  for (const d of ds) {
+    const k = String(d.archivo||'').split('/')[0];
+    (byCat[k] = byCat[k] || []).push(d);
+  }
+  const names = {'01-':'Leyes y decretos','02-':'Reglamentos','03-':'Protocolos MINSAL','04-':'Guías técnicas','05-':'SUSESO','06-':'Normas NCh'};
+  $('docs').innerHTML = Object.keys(byCat).sort().map(k => `
+    <h3 style="font-size:14px;color:#cfe3ff;margin:18px 0 6px">${esc(names[k] || k)} <span class="meta">(${byCat[k].length})</span></h3>
+    <div class="docs">${byCat[k].map(d => `<div class="docline"><a data-doclink="${d.doc_id}">${esc(d.norma || d.archivo.split('/').pop())}</a> <span class="n">${d.anio ? d.anio + ' · ' : ''}${d.paginas || '?'} pág.</span></div>`).join('')}</div>
+  `).join('');
 }
 
-function esc(s){ return (s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+async function docView(id){
+  $('out').classList.add('hidden'); $('chips').classList.add('hidden');
+  $('docslist').innerHTML = '';
+  $('docs').classList.remove('hidden'); $('doctitle').classList.remove('hidden');
+  $('docs').innerHTML = '<div class="card">Cargando ficha…</div>';
+  const d = (await api('select * from documento($1::int)', [id]))[0] || {};
+  const fs = await api('select * from fragmentos_doc($1::int)', [id]).catch(() => []);
+  const ocr = d.escaneado ? ' · <span class="ok">texto por OCR</span>' : '';
+  $('docs').innerHTML = `
+    <div class="card">
+      <h3>${esc(d.norma || 'Documento')}</h3>
+      <div class="meta">${esc(d.tipo || '')}${d.anio ? ' · ' + esc(d.anio) : ''}${d.materia ? ' · ' + esc(d.materia) : ''} · ${d.paginas || '?'} páginas${ocr}</div>
+      <div class="txt">${esc(d.archivo || '')}</div>
+      <div class="acts"><a href="${pdfURL(d.archivo)}" target="_blank" rel="noopener">PDF ↗</a>
+      <span class="b" data-cita-doc="1">copiar referencia</span></div>
+    </div>
+    <h3 style="font-size:14px;color:#cfe3ff;margin:16px 0 6px">Fragmentos (${fs.length})</h3>
+    ${fs.map(f => `<div class="card"><div class="meta">p. ${f.page} ${f.section ? '· ' + esc(f.section) : ''}</div>
+      <div class="txt">${esc((f.texto || '').slice(0, 420))}${(f.texto||'').length > 420 ? '…' : ''}</div>
+      <div class="acts"><a href="${pdfURL(d.archivo, f.page)}" target="_blank" rel="noopener">PDF p.${f.page} ↗</a></div></div>`).join('')}`;
+}
 
-// chips
-document.getElementById('chips').innerHTML = FILTERS.map(f =>
-  `<span class="chip${f.id===cur?' on':''}" data-id="${f.id}">${f.label}</span>`).join('');
-document.getElementById('alldocs').addEventListener('click', e => { e.preventDefault(); goDocs(); });
-document.getElementById('chips').addEventListener('click', e => {
-  const c = e.target.closest('.chip'); if (!c) return;
-  cur = c.dataset.id;
-  document.querySelectorAll('.chip').forEach(x => x.classList.toggle('on', x.dataset.id === cur));
-  render();
+document.addEventListener('click', e => {
+  if (e.target.id === 'enter') enter();
+  if (e.target.dataset && e.target.dataset.citaDoc) { /* noop */ }
 });
 
-const p = new URLSearchParams(location.search).get('q');
-if (p){ document.getElementById('q').value = p; search(p); }
+async function enter(){
+  const pw = $('pass').value;
+  $('lockerr').textContent = '';
+  try {
+    KB = await unlock(pw);
+    sessionStorage.setItem('kb', JSON.stringify(KB));
+    $('lock').classList.add('hidden'); $('app').classList.remove('hidden');
+    await goDocs();
+  } catch (err) {
+    $('lockerr').textContent = 'Contraseña incorrecta.';
+  }
+}
+
+$('go').addEventListener('click', start);
+$('enter').addEventListener('click', enter);
+$('pass').addEventListener('keydown', e => { if (e.key === 'Enter') enter(); });
+$('q').addEventListener('keydown', e => { if (e.key === 'Enter') start(); });
+
+(async () => {
+  const saved = sessionStorage.getItem('kb');
+  if (saved) { KB = JSON.parse(saved); $('lock').classList.add('hidden'); $('app').classList.remove('hidden'); await goDocs(); }
+})();
 </script>
 </body>
 </html>
