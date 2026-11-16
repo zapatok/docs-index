@@ -104,7 +104,10 @@ async function unlock(pw){
 }
 
 async function api(sql, params){
-  const r = await fetch(KB.host.replace(/\/$/, '') + '/sql', {
+  let h = String(KB.host || '').replace(/\/+$/, '').replace(/\/sql$/, '');
+  if (!/^https?:\/\//i.test(h)) h = 'https://' + h;
+  const ep = h + '/sql';
+  const r = await fetch(ep, {
     method:'POST',
     headers:{'Content-Type':'text/plain;charset=UTF-8','Neon-Connection-String':KB.dsn},
     body: JSON.stringify({query: sql, params: params || []})
