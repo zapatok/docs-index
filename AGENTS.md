@@ -56,3 +56,15 @@ Todo lo necesario está en este repositorio:
 - `tools/kb_mcp.py` — servidor MCP (7 herramientas).
 - `data/` (release) — `chunks.jsonl` con todos los fragmentos, `docs.jsonl`, `catalogo.csv`,
   `biblioteca.db` (SQLite con FTS5) y `emb.npy` (embeddings 384d) para uso offline.
+
+## Actualización 2026-11-16
+
+- La jerga chilena ya está resuelta en el servidor: `buscar("cphs")` trae el
+  Compendio Libro IV sin que tengas que escribir "comité paritario". No expandas
+  a mano.
+- Los duplicados exactos (193 fragmentos) están marcados y excluidos.
+- `fragmentos_doc(doc_id)` lista todo un documento; úsalo antes de pedir el PDF.
+- Categoría `07-` = jurisprudencia (por ahora seis circulares de SUSESO; los
+  dictámenes de la DT no se pudieron descargar desde este entorno).
+- Los PDF están en el release `pdfs-v1`; arma el enlace con el nombre del
+  archivo y `#page=N` cuando el usuario quiera ver la fuente.

@@ -58,13 +58,13 @@ button:disabled{opacity:.55;cursor:default}
   <input id="pass" type="password" autocomplete="current-password" placeholder="contraseña">
   <button id="enter">Entrar</button>
   <div id="lockerr" class="err"></div>
-  <div class="hint">168 documentos oficiales · 6.867 páginas · 13.556 fragmentos</div>
+  <div class="hint">174 documentos oficiales · 6.867+ páginas · 13.847 fragmentos</div>
 </div>
 
 <div id="app" class="hidden">
   <header>
     <h1>Biblioteca de prevención de riesgos laborales</h1>
-    <div class="sub" id="sub">168 documentos oficiales · 6.867 páginas · 13.556 fragmentos únicos indexados por artículo y página</div>
+    <div class="sub" id="sub">174 documentos oficiales · 6.867+ páginas · 13.847 fragmentos únicos indexados por artículo y página</div>
   </header>
   <div class="wrap">
     <div class="bar">
@@ -137,7 +137,7 @@ function cita(r){
 
 function render(q, ms){
   lastQ = q;
-  const cats = [['Todo', null], ['Leyes y decretos','01-'], ['Reglamentos','02-'], ['Protocolos MINSAL','03-'], ['Guías técnicas','04-'], ['SUSESO','05-'], ['Normas NCh','06-']];
+  const cats = [['Todo', null], ['Leyes y decretos','01-'], ['Reglamentos','02-'], ['Protocolos MINSAL','03-'], ['Guías técnicas','04-'], ['SUSESO','05-'], ['Normas NCh','06-'], ['Jurisprudencia','07-']];
   $('chips').innerHTML = cats.map(([n,v]) => `<span class="chip ${cat===v?'on':''}" data-cat="${v}">${n}</span>`).join('');
   const list = shown.filter(r => !cat || String(r.archivo||'').startsWith(cat));
   $('out').innerHTML = list.length ? list.map((r,i) => `

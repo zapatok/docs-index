@@ -111,3 +111,41 @@ python3 tools/kb.py documentos --cat 05-
   y nombres propios. `documento(id)` marca `extraido = 'ocr'`.
 - Límites: 8 s por consulta (`statement_timeout`), sin cuota de peticiones. Uso razonable: decenas
   de consultas por minuto.
+
+## Actualización 2026-11-16
+
+**Regla de transporte.** El endpoint HTTP de Neon solo acepta
+`Content-Type: text/plain` desde el navegador: su preflight CORS no incluye
+`content-type` en `access-control-allow-headers`, así que con
+`application/json` el navegador corta con `Failed to fetch`. El cuerpo sigue
+siendo JSON.
+
+### Funciones nuevas
+
+| Función | Devuelve |
+|---|---|
+| `buscar(q,n,cat)` | léxica **con expansión de jerga** (usa `qexpand`) |
+| `buscar_q(q,n,cat)` | igual que `buscar`, nombre histórico |
+| `buscar_cat(q,n,cat)` | léxica sin expansión |
+| `buscar_vec(vec,n,cat)` | semántica pura (`emb <=> vec`) |
+| `buscar_hibrido(q,vec,n,cat,w)` | RRF léxico+vector, con `origen` |
+| `articulo(norma,art,n)` | artículo exacto (`section = 'Art. '||art`) |
+| `fragmentos_doc(doc_id)` | todos los fragmentos de un documento |
+| `qexpand(q)` | la `tsquery` expandida, para depurar |
+
+Todas excluyen duplicados (`dup_of is null`) y respetan `p_cat` como prefijo de
+`archivo` (`'03-'` = protocolos MINSAL).
+
+### Tesauro
+
+Tabla `syn(term, exps)`, 92 términos con raíces en español
+(`ts_lexize('spanish_stem', …)`). Ejemplos: `prexor → ruido, sonido,
+audiometría`, `cphs → comité, paritario, higiene, seguridad`, `planesi → sílice,
+polvo, neumoconiosis`, `oal → mutual, organismo administrador`. Se edita con
+`insert into syn values ('jerga', array['raiz1','raiz2']) on conflict (term) do update set exps=excluded.exps`.
+
+### Permisos
+
+`web_ro` necesita `select` sobre `syn` porque `qexpand` la lee; además
+`qexpand` y `buscar` están como `security definer` para que el rol no dependa de
+permisos intermedios.
