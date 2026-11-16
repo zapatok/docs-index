@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "biblioteca-prevencion": {
+      "command": "python3",
+      "args": ["tools/kb_mcp.py"],
+      "env": {
+        "KB_DSN": "postgresql://web_ro:REEMPLAZAR@ep-soft-pond-bccs48f1-pooler.c-16.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
+      }
+    }
+  }
+}
